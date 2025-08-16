@@ -1,0 +1,148 @@
+version: '3.8'
+
+services:
+  service-discovery:
+    build: ./discovery-server
+    container_name: eureka_server
+    ports:
+      - "8761:8761"
+    networks:
+      - microservice-network
+
+
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: api_gateway
+    ports:
+      - "8081:8081"
+    depends_on:
+      - service-discovery
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka/
+      EUREKA_CLIENT_SERVICEURL: http://service-discovery:8761/
+
+    networks:
+      - microservice-network
+
+
+
+
+
+  order-service:
+    build: ./order-service
+    container_name: order_service
+    ports:
+      - "8086:8086"
+    depends_on:
+      - service-discovery
+    environment:
+      SPRING_APPLICATION_NAME: order-service
+      SERVER_PORT: 8086
+
+      # MySQL DB config from AWS RDS
+      SPRING_DATASOURCE_URL: jdbc:mysql://database-dk.cbsky6q8u9pi.ap-south-1.rds.amazonaws.com:3306/orderDB?useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: dheeraj
+      SPRING_DATASOURCE_PASSWORD: dheeraj#123
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+
+      # JPA config
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: true
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
+
+      # Connection Pool Tuning
+      SPRING_DATASOURCE_TESTWHILEIDLE: true
+      SPRING_DATASOURCE_VALIDATIONQUERY: SELECT 1
+      SPRING_DATASOURCE_TIMEBETWEENEVICTIONRUNSMILLIS: 60000
+
+      # Eureka
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: true
+      EUREKA_CLIENT_FETCH_REGISTRY: true
+
+      # Health checks
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "*"
+      MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: always
+    networks:
+      - microservice-network
+
+
+
+
+
+  product-service:
+    build: ./product-service
+    container_name: product_service
+    ports:
+      - "8085:8085"
+    depends_on:
+      - service-discovery
+    environment:
+      SPRING_APPLICATION_NAME: product-service
+      SERVER_PORT: 8085
+
+      # MongoDB Atlas configuration
+      SPRING_DATA_MONGODB_URI: mongodb+srv://dheeraj:dheeraj@clusterecommers.f08ti1l.mongodb.net/ProductDB?retryWrites=true&w=majority&appName=ClusterEcommers
+
+      # Eureka configuration
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: true
+      EUREKA_CLIENT_FETCH_REGISTRY: true
+
+      # Health check configuration
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "*"
+      MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: always
+    networks:
+      - microservice-network
+
+
+
+
+
+
+
+  inventory-service:
+    build: ./inventory-service
+    container_name: inventory_service
+    ports:
+      - "8083:8083"  # You can expose a specific port if needed
+    depends_on:
+      - service-discovery
+    environment:
+      SPRING_APPLICATION_NAME: inventory-service
+      SERVER_PORT: 0  # Random port, Spring will pick one
+
+      # MySQL DB configuration via AWS RDS
+      SPRING_DATASOURCE_URL: jdbc:mysql://database-dk.cbsky6q8u9pi.ap-south-1.rds.amazonaws.com:3306/inventoryDB?useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: dheeraj
+      SPRING_DATASOURCE_PASSWORD: dheeraj#123
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+
+      # JPA config
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: true
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
+
+      # Connection tuning
+      SPRING_DATASOURCE_TESTWHILEIDLE: true
+      SPRING_DATASOURCE_VALIDATIONQUERY: SELECT 1
+      SPRING_DATASOURCE_TIMEBETWEENEVICTIONRUNSMILLIS: 60000
+
+      # Eureka
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: true
+      EUREKA_CLIENT_FETCH_REGISTRY: true
+
+      # Health endpoints
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "*"
+      MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: always
+
+    networks:
+      - microservice-network
+
+
+
+networks:
+  microservice-network:
+    driver: bridge
