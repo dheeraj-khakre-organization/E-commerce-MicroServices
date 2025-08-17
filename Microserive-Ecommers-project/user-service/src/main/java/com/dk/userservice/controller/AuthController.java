@@ -31,11 +31,11 @@ public class AuthController {
         return ResponseEntity.ok(userService.registerUser(dto));
     }
 
-    @GetMapping
-    // @PreAuthorize("hasRole('ADMIN')")
-    public List<UserResponseDTO> getAllUsers() {
-        return userService.getAllUsers();
-    }
+//    @GetMapping
+//    // @PreAuthorize("hasRole('ADMIN')")
+//    public List<UserResponseDTO> getAllUsers() {
+//        return userService.getAllUsers();
+//    }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
