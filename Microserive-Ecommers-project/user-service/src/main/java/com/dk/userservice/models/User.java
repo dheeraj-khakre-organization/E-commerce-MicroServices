@@ -45,6 +45,8 @@ public class User {
 
     private Gender gender;
 
+    private  String provider;
+
     private Boolean active = true;
 
     private List<String> roles = new ArrayList<>();

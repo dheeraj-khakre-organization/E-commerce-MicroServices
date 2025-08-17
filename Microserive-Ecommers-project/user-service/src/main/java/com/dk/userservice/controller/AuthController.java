@@ -4,6 +4,7 @@ import com.dk.userservice.dtos.LoginRequest;
 import com.dk.userservice.dtos.UserRequestDTO;
 import com.dk.userservice.dtos.UserResponseDTO;
 import com.dk.userservice.security.JwtUtil;
+import com.dk.userservice.service.JWTService;
 import com.dk.userservice.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,24 +23,21 @@ import java.util.List;
 public class AuthController {
 
     private final UserService userService;
-    private final JwtUtil jwtUtil;
-    private  final AuthenticationManager authenticate;
+    private final JWTService service;
     @PostMapping("/register")
     public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody UserRequestDTO dto) {
         return ResponseEntity.ok(userService.registerUser(dto));
     }
-
-    @GetMapping
-   // @PreAuthorize("hasRole('ADMIN')")
-    public List<UserResponseDTO> getAllUsers() {
-        return userService.getAllUsers();
-    }
+//
+//    @GetMapping
+//   // @PreAuthorize("hasRole('ADMIN')")
+//    public List<UserResponseDTO> getAllUsers() {
+//        return userService.getAllUsers();
+//    }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
-        Authentication auth = authenticate.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        String token = jwtUtil.generateToken(loginRequest.getUsername());
+             String token = service.getJWTToken(loginRequest);
         return ResponseEntity.ok(token);
     }
 
