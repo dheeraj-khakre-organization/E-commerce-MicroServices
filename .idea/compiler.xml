@@ -12,21 +12,13 @@
         </processorPath>
         <module name="discovery-server" />
         <module name="inventory-service" />
+        <module name="user-service (1)" />
         <module name="email-service" />
         <module name="api-gateway" />
         <module name="product-service" />
         <module name="sales-promotions-service" />
         <module name="order-service" />
         <module name="user-service" />
-      </profile>
-      <profile name="Annotation profile for user-service (1)" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
-        </processorPath>
-        <module name="user-service (1)" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
