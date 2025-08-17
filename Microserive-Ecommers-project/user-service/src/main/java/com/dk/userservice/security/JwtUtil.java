@@ -1,5 +1,6 @@
 package com.dk.userservice.security;
 
+import com.dk.userservice.exception.JwtValidationException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
@@ -43,15 +44,22 @@ public class JwtUtil {
                 .getSubject();
     }
 
-    public boolean validateToken(String token) {
+    public void validateTokenOrThrow(String token) {
         try {
             Jwts.parserBuilder()
                     .setSigningKey(secretKey)
                     .build()
                     .parseClaimsJws(token);
-            return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            return false;
+        } catch (ExpiredJwtException e) {
+            throw new JwtValidationException("Token expired");
+        } catch (UnsupportedJwtException e) {
+            throw new JwtValidationException("Unsupported token");
+        } catch (MalformedJwtException e) {
+            throw new JwtValidationException("Malformed token");
+        } catch (SecurityException e) {
+            throw new JwtValidationException("Invalid signature");
+        } catch (IllegalArgumentException e) {
+            throw new JwtValidationException("Token is null or empty");
         }
     }
 
