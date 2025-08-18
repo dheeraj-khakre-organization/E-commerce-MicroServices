@@ -22,6 +22,7 @@
         <module>email-service</module>
         <module>sales-promotions-service</module>
         <module>user-service</module>
+        <module>config-service</module>
     </modules>
 
     <properties>
