@@ -10,8 +10,10 @@
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
+        <module name="config-service" />
         <module name="discovery-server" />
         <module name="inventory-service" />
+        <module name="user-service (1)" />
         <module name="email-service" />
         <module name="api-gateway" />
         <module name="product-service" />
@@ -19,14 +21,10 @@
         <module name="order-service" />
         <module name="user-service" />
       </profile>
-      <profile name="Annotation profile for user-service (1)" enabled="true">
+      <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
-        </processorPath>
-        <module name="user-service (1)" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -38,6 +36,7 @@
       <module name="Microserive-Ecommers" options="-parameters" />
       <module name="User-Service" options="-parameters" />
       <module name="api-gateway" options="-parameters" />
+      <module name="config-service" options="-parameters" />
       <module name="discovery-server" options="-parameters" />
       <module name="email-service" options="-parameters" />
       <module name="inventory-service" options="-parameters" />
