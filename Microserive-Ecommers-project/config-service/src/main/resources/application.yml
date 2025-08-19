@@ -14,7 +14,7 @@ spring:
           # If your files are in a subfolder, set:
           # search-paths: config      # (optional)
           username: ${GIT_USERNAME:Dheeraj-khakre}
-          password: ${GIT_TOKEN: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}
+          password: ${GIT_TOKEN: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}
 
 eureka:
   client:
