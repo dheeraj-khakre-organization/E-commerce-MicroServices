@@ -28,10 +28,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
+    private final   PasswordEncoder passwordEncoder;
 
-    public PasswordEncoder getPasswordEncoder(PasswordEncoder passwordEncoder) {
-        return passwordEncoder;
-    }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -67,7 +65,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                         .userName(email.split("@")[0])
                         .firstName(firstName)
                         .lastName(lastName)
-                        .password(password) // Consider encoding if needed
+                        .password(passwordEncoder.encode(password)) // Consider encoding if needed
                         .provider(provider.toUpperCase())
                         .active(true)
                         .roles(Collections.singletonList("ROLE"))
