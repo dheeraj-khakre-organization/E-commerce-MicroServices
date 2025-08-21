@@ -1,0 +1,22 @@
+server:
+  port: 8085
+spring:
+  application:
+    name: config-server
+
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/Dheeraj-Khakre/config-server-microservice.git
+          default-label: main         # or 'master' if your repo uses that
+          clone-on-start: true
+          # If your files are in a subfolder, set:
+          # search-paths: config      # (optional)
+          username: ${GIT_USERNAME:Dheeraj-khakre}
+          password: ${GIT_TOKEN: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}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
